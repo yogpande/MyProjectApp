@@ -1,0 +1,94 @@
+﻿
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/mydesign.cshtml";
+}
+
+@section header
+{
+    Manage State Here...
+}
+
+@section menus
+{
+    <li class="">
+        <a href="index.html">
+            <i class="menu-icon fa fa-tachometer"></i>
+            <span class="menu-text"> Dashboard </span>
+        </a>
+
+        <b class="arrow"></b>
+    </li>
+
+    <li class="active open">
+        <a href="index.html">
+            <i class="menu-icon fa fa-cogs"></i>
+            <span class="menu-text"> Manage State </span>
+        </a>
+
+        <b class="arrow"></b>
+    </li>
+
+}
+
+<br />
+
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <!-- PAGE CONTENT BEGINS -->
+        <div class="form-horizontal">
+            <div class="form-group">
+                <div class="col-md-10">
+                    <input type="text" id="txtStateName" height="43" placeholder="Enter State Name" class="col-md-8" />
+
+                    &nbsp; &nbsp; &nbsp;
+                    <button class="btn btn-info" id="btnSave" type="button">
+                        <i class="ace-icon fa fa-check"></i>
+                        Submit
+                    </button>
+                    &nbsp; &nbsp; &nbsp;
+                    <button class="btn" type="button" id="btnCancel">
+                        <i class="ace-icon fa fa-undo"></i>
+                        Reset
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="~/assets/jquery-1.10.2.js"></script>
+<script>
+    $(document).ready(function () {
+        
+        $('#btnSave').click(function () {
+
+            var statename = $('#txtStateName').val();
+
+            if (statename!='') {
+               
+                $.post('/ManageState/AddState', { sname:statename }, function (data) {
+
+                    if (data) {
+                        alert('state details saved');
+                    }
+                    else {
+                        alert('try again');
+                    }
+
+                });
+
+            }
+            else
+            {
+                alert('please enter state name');
+                $('#txtStateName').focus();
+            }
+
+        });
+
+
+    });
+</script>
