@@ -77,11 +77,8 @@
     </div>
 </div>
 
-<div id="loadingDiv" style="display:none;">
-    <div>
-        <h1>Please wait...</h1>
-    </div>
-</div>
+<div id="loadingDiv" style="display:none;"></div>
+
 
 <script src="~/assets/jquery-1.10.2.js"></script>
 <script>
@@ -95,23 +92,22 @@
                 $('#loadingDiv').show();
                 $.post('/ManageState/AddState', { sname: statename }, function (data) {
                     $('#loadingDiv').hide();
-                    if (data) {
+                    if (data)
+                    {
                         $('#msg1').attr('class', 'alert alert-success alert-dismissible');
                         $('#msg').html('Success');
-                        $('#msgextra').html('state info saved');
-                        $("#msg1").fadeTo(4000, 500).slideUp(500, function () {
-                            $("#msg1").slideUp(500);
-                        });
+                        $('#msgextra').html('state info saved');                       
                         $('#txtStateName').val('');
                     }
-                    else {
+                    else
+                    {
                         $('#msg1').attr('class', 'alert alert-danger alert-dismissible');
                         $('#msg').html('Error');
                         $('#msgextra').html('state info not saved');
-                        $("#msg1").fadeTo(4000, 500).slideUp(500, function () {
-                            $("#msg1").slideUp(500);
-                        });
                     }
+                    $("#msg1").fadeTo(4000, 500).slideUp(500, function () {
+                        $("#msg1").slideUp(500);
+                    });
 
                 });
 

@@ -26,7 +26,7 @@ namespace MyProjectApp.Models
                     db.SaveChanges();
                     status = true;
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     status = false;
                 }
