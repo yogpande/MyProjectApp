@@ -8,7 +8,22 @@
 {
     Manage State Here...
 }
-
+<style>
+    #loadingDiv {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        width: 100%;
+        height: 100%;
+        background-color: #666;
+        background-image: url('http://www.ifmo.ru/images/loader.gif');
+        background-repeat: no-repeat;
+        background-position: center;
+        z-index: 10000000;
+        opacity: 0.4;
+        filter: alpha(opacity=40); /* For IE8 and earlier */
+    }
+</style>
 @section menus
 {
     <li class="">
@@ -31,8 +46,12 @@
 }
 
 <br />
-
 <hr />
+<div id="msg1" style="display:none;">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong><span id="msg"></span></strong>.  <span id="msgextra"></span>.
+</div>
+
 <div class="row">
     <div class="col-md-12">
         <!-- PAGE CONTENT BEGINS -->
@@ -58,30 +77,46 @@
     </div>
 </div>
 
+<div id="loadingDiv" style="display:none;">
+    <div>
+        <h1>Please wait...</h1>
+    </div>
+</div>
+
 <script src="~/assets/jquery-1.10.2.js"></script>
 <script>
     $(document).ready(function () {
-        
+
         $('#btnSave').click(function () {
 
             var statename = $('#txtStateName').val();
 
-            if (statename!='') {
-               
-                $.post('/ManageState/AddState', { sname:statename }, function (data) {
-
+            if (statename != '') {
+                $('#loadingDiv').show();
+                $.post('/ManageState/AddState', { sname: statename }, function (data) {
+                    $('#loadingDiv').hide();
                     if (data) {
-                        alert('state details saved');
+                        $('#msg1').attr('class', 'alert alert-success alert-dismissible');
+                        $('#msg').html('Success');
+                        $('#msgextra').html('state info saved');
+                        $("#msg1").fadeTo(4000, 500).slideUp(500, function () {
+                            $("#msg1").slideUp(500);
+                        });
+                        $('#txtStateName').val('');
                     }
                     else {
-                        alert('try again');
+                        $('#msg1').attr('class', 'alert alert-danger alert-dismissible');
+                        $('#msg').html('Error');
+                        $('#msgextra').html('state info not saved');
+                        $("#msg1").fadeTo(4000, 500).slideUp(500, function () {
+                            $("#msg1").slideUp(500);
+                        });
                     }
 
                 });
 
             }
-            else
-            {
+            else {
                 alert('please enter state name');
                 $('#txtStateName').focus();
             }
