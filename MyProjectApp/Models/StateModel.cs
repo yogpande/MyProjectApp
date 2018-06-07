@@ -134,5 +134,20 @@ namespace MyProjectApp.Models
 
             return li;
         }
+
+        public List<CityModel> GetCityByState(int id)
+        {
+            List<CityModel> li = new List<CityModel>();
+
+            foreach (var item in db.tblCities.Where(a => a.stateid == id).ToList())
+            {
+                CityModel cm = new CityModel();
+                cm.cid = item.cityid;
+                cm.cname = item.cityname;
+                li.Add(cm);
+            }
+
+            return li;
+        }
     }
 }

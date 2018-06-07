@@ -1,0 +1,163 @@
+﻿@model MyProjectApp.Models.UserModel
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/mydesign.cshtml";
+}
+@section header
+{
+    Manage User Here...
+}
+
+@section menus
+{
+    <li class="">
+        <a href="index.html">
+            <i class="menu-icon fa fa-tachometer"></i>
+            <span class="menu-text"> Dashboard </span>
+        </a>
+
+        <b class="arrow"></b>
+    </li>
+
+    <li class="active open">
+        <a href="index.html">
+            <i class="menu-icon fa fa-cogs"></i>
+            <span class="menu-text"> Manage State </span>
+        </a>
+        <b class="arrow"></b>
+    </li>
+
+    <li class="active open">
+        <a href="index.html">
+            <i class="menu-icon fa fa-cogs"></i>
+            <span class="menu-text"> Manage City </span>
+        </a>
+        <b class="arrow"></b>
+    </li>
+
+    <li class="active open">
+        <a href="index.html">
+            <i class="menu-icon fa fa-cogs"></i>
+            <span class="menu-text"> Manage User </span>
+        </a>
+        <b class="arrow"></b>
+    </li>
+
+}
+
+<br />
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <!-- PAGE CONTENT BEGINS -->
+        <div class="panel panel-info">
+            <div class="panel-heading">Add User Detail</div>
+            <div class="panel-body">
+                <div class="col-md-7">
+                    <div class="form-group">
+                        <span>User Name</span>
+                        @Html.TextBoxFor(a => a.username, new { @class = "form-control" })
+                    </div>
+
+                    <div class="form-group">
+                        <span>Select Gender</span><br/>
+                        @Html.RadioButtonFor(a=>a.ugender,"male") Male
+                        @Html.RadioButtonFor(a => a.ugender, "female") Female
+                    </div>
+
+                    <div class="form-group">
+                        <span>Email</span>
+                        @Html.TextBoxFor(a => a.uemail, new { type="email",@class = "form-control" })
+                    </div>
+
+                    <div class="form-group">
+                        <span>Password</span>
+                        @Html.PasswordFor(a => a.upass, new { @class = "form-control" })
+                    </div>
+
+                    
+
+                    <div class="form-group">
+                        <span>D.O.B</span>
+                        @Html.TextBoxFor(a => a.udob, new {type="date", @class = "form-control" })
+                    </div>
+
+                    <div class="form-group">
+                        <span>Select Hobbies</span>
+                        <br/>
+                        <input type="checkbox" name="hby" value="Cricket" /> Cricket
+                        <input type="checkbox" name="hby" value="Chess" /> Chess
+                        <input type="checkbox" name="hby" value="Carrom" /> Carrom
+                        <input type="checkbox" name="hby" value="Travelling" /> Travelling
+                    </div>
+
+                    <div class="form-group">
+                        <span>Select State</span>
+                        @Html.DropDownListFor(a=>a.sid,new SelectList(ViewBag.states,"sid","sname"),"Select State",new { @class="form-control"})
+                    </div>
+
+                    <div class="form-group">
+                        <span>Select City</span>
+                        @Html.DropDownListFor(a => a.cid, new SelectList(new List<string>(), "cid", "cname"), "Select City", new { @class = "form-control" })
+                    </div>
+
+                    <div class="form-group">
+                        <span>Upload Photo</span>
+                        <br/>
+                        <input type="file" name="uphoto" class="form-control"/>
+                    </div>
+
+                    <button type="submit" class="btn btn-success btn-lg">Save User</button>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<script src="~/assets/jquery-1.10.2.js"></script>
+
+<script>
+    $(document).ready(function () {
+
+        $('#sid').change(function () {
+
+            var sid = $(this).val();
+
+            if (sid!='') {
+
+                $.ajax({
+                    url: '/ManageUser/GetCityByState/',
+                    type: 'GET',
+                    data: {id:sid},
+                    dataType: 'json',
+                    success: function (data) {
+
+                        $('#cid').empty().append("<option value=0>Select City</option>");
+                        $.each(data, function (i) {
+                            $('#cid').append("<option value='" + data[i].cid + "'>" + data[i].cname + "</option>");
+                        });
+
+
+                    },
+                    error: function (x) { alert(x.error); $('#cid').empty().append("<option value=0>Select City</option>"); }
+
+
+                });
+
+            }
+            else
+            {
+                alert('please select proper state');
+                $('#cid').empty().append("<option value=0>Select City</option>");
+            }
+
+        });
+
+
+    });
+
+
+</script>
