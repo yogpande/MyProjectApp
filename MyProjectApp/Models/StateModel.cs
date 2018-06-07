@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using MyProjectApp.EF;
+using System.Data.Entity.Core;
+using System.Data.SqlClient;
+using System.Data.Entity.Infrastructure;
 
 namespace MyProjectApp.Models
 {
@@ -13,10 +16,10 @@ namespace MyProjectApp.Models
         public int sid { get; set; }
         public string sname { get; set; }
 
-        public bool AddNewState(string statename)
+        public int AddNewState(string statename) //0 error , 1 success , 2 unique key/pk error
         {
-            bool status = false;
-            if (statename.Length>0)
+            int status = 0;
+            if (statename.Length > 0)
             {
                 try
                 {
@@ -24,11 +27,21 @@ namespace MyProjectApp.Models
                     state.statename = statename;
                     db.tblStates.Add(state);
                     db.SaveChanges();
-                    status = true;
+                    status = 1;
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    status = false;
+                    var dbupdateException = ex as DbUpdateException;
+                    var sqlException = dbupdateException.InnerException.InnerException as SqlException;
+                   
+                    if (sqlException.Number == 2627)
+                    {
+                        status = 2;
+                    }
+                    else
+                    {
+                        status = 0;
+                    }
                 }
 
                 return status;

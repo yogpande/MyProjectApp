@@ -55,25 +55,45 @@
 <div class="row">
     <div class="col-md-12">
         <!-- PAGE CONTENT BEGINS -->
-        <div class="form-horizontal">
-            <div class="form-group">
-                <div class="col-md-10">
-                    <input type="text" id="txtStateName" height="43" placeholder="Enter State Name" class="col-md-8" />
+        <div class="panel panel-info">
+            <div class="panel-heading">Add State Details</div>
+            <div class="panel-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            <input type="text" id="txtStateName" height="43" placeholder="Enter State Name" class="col-md-8" />
 
-                    &nbsp; &nbsp; &nbsp;
-                    <button class="btn btn-info" id="btnSave" type="button">
-                        <i class="ace-icon fa fa-check"></i>
-                        Submit
-                    </button>
-                    &nbsp; &nbsp; &nbsp;
-                    <button class="btn" type="button" id="btnCancel">
-                        <i class="ace-icon fa fa-undo"></i>
-                        Reset
-                    </button>
+                            &nbsp; &nbsp; &nbsp;
+                            <button class="btn btn-info" id="btnSave" type="button">
+                                <i class="ace-icon fa fa-check"></i>
+                                Submit
+                            </button>
+                            &nbsp; &nbsp; &nbsp;
+                            <button class="btn" type="button" id="btnCancel">
+                                <i class="ace-icon fa fa-undo"></i>
+                                Reset
+                            </button>
+                        </div>
+                    </div>
                 </div>
-            </div>
+                <hr/>
+              <div class="text-center text-danger"><h3><u><b>View State List</b></u></h3></div>
+                <br/>
+                <br/>
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <td>#</td>
+                            <td>State</td>
+                        </tr>
+                    </thead>
+                    <tbody>
 
+                    </tbody>
+                </table>
+            </div>
         </div>
+
     </div>
 </div>
 
@@ -92,20 +112,25 @@
                 $('#loadingDiv').show();
                 $.post('/ManageState/AddState', { sname: statename }, function (data) {
                     $('#loadingDiv').hide();
-                    if (data)
-                    {
+                    if (data == 1) {
                         $('#msg1').attr('class', 'alert alert-success alert-dismissible');
                         $('#msg').html('Success');
-                        $('#msgextra').html('state info saved');                       
+                        $('#msgextra').html('state info saved');
                         $('#txtStateName').val('');
                     }
-                    else
+                    else if(data == 2)
                     {
+                        $('#msg1').attr('class', 'alert alert-warning alert-dismissible');
+                        $('#msg').html('Error');
+                        $('#msgextra').html('state name already saved,try different name.');
+                        $('#txtStateName').focus()
+                    }
+                    else {
                         $('#msg1').attr('class', 'alert alert-danger alert-dismissible');
                         $('#msg').html('Error');
                         $('#msgextra').html('state info not saved');
                     }
-                    $("#msg1").fadeTo(4000, 500).slideUp(500, function () {
+                    $("#msg1").fadeTo(6000, 500).slideUp(500, function () {
                         $("#msg1").slideUp(500);
                     });
 
