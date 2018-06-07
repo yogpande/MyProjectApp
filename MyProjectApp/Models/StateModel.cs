@@ -15,6 +15,9 @@ namespace MyProjectApp.Models
 
         public int sid { get; set; }
         public string sname { get; set; }
+        public int PageIndex { get; set; }
+        public int PageSize { get; set; }
+        public int RecordCount { get; set; }
 
         public int AddNewState(string statename) //0 error , 1 success , 2 unique key/pk error
         {
@@ -50,6 +53,21 @@ namespace MyProjectApp.Models
             {
                 return status;
             }
+        }
+
+        public List<StateModel> GetStates()
+        {
+            List<StateModel> li = new List<StateModel>();
+
+            foreach (var item in db.tblStates.ToList())
+            {
+                StateModel sm = new StateModel();
+                sm.sid = item.stateid;
+                sm.sname = item.statename;
+                li.Add(sm);
+            }
+
+            return li;
         }
 
     }

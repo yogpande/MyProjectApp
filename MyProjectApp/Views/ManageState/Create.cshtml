@@ -3,7 +3,8 @@
     ViewBag.Title = "Create";
     Layout = "~/Views/Shared/mydesign.cshtml";
 }
-
+<script src="~/assets/jquery-1.10.2.js"></script>
+<script src="~/scripts/JavaScript.js"></script>
 @section header
 {
     Manage State Here...
@@ -23,6 +24,29 @@
         opacity: 0.4;
         filter: alpha(opacity=40); /* For IE8 and earlier */
     }
+
+    .Pager span {
+            text-align: center;
+            color: #333;
+            display: inline-block;
+            width: 20px;
+            background-color: #B8DBFD;
+            margin-right: 3px;
+            line-height: 150%;
+            border: 1px solid #B8DBFD;
+        }
+ 
+        .Pager a {
+            text-align: center;
+            display: inline-block;
+            width: 20px;
+            background-color: #ccc;
+            color: #333;
+            border: 1px solid #ccc;
+            margin-right: 3px;
+            line-height: 150%;
+            text-decoration: none;
+        }
 </style>
 @section menus
 {
@@ -56,7 +80,7 @@
     <div class="col-md-12">
         <!-- PAGE CONTENT BEGINS -->
         <div class="panel panel-info">
-            <div class="panel-heading">Add State Details</div>
+            <div class="panel-heading">Add State Detail</div>
             <div class="panel-body">
                 <div class="form-horizontal">
                     <div class="form-group">
@@ -80,7 +104,7 @@
               <div class="text-center text-danger"><h3><u><b>View State List</b></u></h3></div>
                 <br/>
                 <br/>
-                <table class="table table-bordered table-hover">
+                <table class="table table-bordered table-hover" id="tblState">
                     <thead>
                         <tr>
                             <td>#</td>
@@ -91,6 +115,8 @@
 
                     </tbody>
                 </table>
+                <br/>
+                <div class="Pager"></div>
             </div>
         </div>
 
@@ -100,9 +126,15 @@
 <div id="loadingDiv" style="display:none;"></div>
 
 
-<script src="~/assets/jquery-1.10.2.js"></script>
+
 <script>
     $(document).ready(function () {
+
+        GetStates(1);
+
+        $("body").on("click", ".Pager .page", function () {
+            GetCustomers(parseInt($(this).attr('page')));
+        });
 
         $('#btnSave').click(function () {
 
@@ -146,4 +178,25 @@
 
 
     });
+
+    function GetStates(pageindex)
+    {
+        $('#loadingDiv').show();
+        $.getJSON('/ManageState/GetStatesByPageIndex/', { pageIndex: pageindex }, function (data) {
+            $('#loadingDiv').hide();
+            $('#tblState tbody').empty();
+            $.each(data, function (i) {
+                $('#tblState tbody').append("<tr><td>" + (i + 1) + "</td><td>" + data[i].sname + "</td></tr>");
+            });
+        });
+
+        //$(".Pager").ASPSnippetsPager({
+        //    ActiveCssClass: "current",
+        //    PagerCssClass: "pager",
+        //    PageIndex: 1,
+        //    PageSize: 10,
+        //    RecordCount: 4
+        //});
+       
+    }
 </script>
