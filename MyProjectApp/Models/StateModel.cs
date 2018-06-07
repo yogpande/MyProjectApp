@@ -15,9 +15,7 @@ namespace MyProjectApp.Models
 
         public int sid { get; set; }
         public string sname { get; set; }
-        public int PageIndex { get; set; }
-        public int PageSize { get; set; }
-        public int RecordCount { get; set; }
+        
 
         public int AddNewState(string statename) //0 error , 1 success , 2 unique key/pk error
         {
@@ -74,8 +72,67 @@ namespace MyProjectApp.Models
 
     public class CityModel
     {
+
+        DBEntities db = new DBEntities();
+
+
         public int cid { get; set; }
         public string cname { get; set; }
-        public StateModel state { get; set; }
+        public int stateid { get; set; }
+        public string statename { get; set; }
+
+        public int AddCity(string cityname,int stateid) //0 error , 1 success , 2 unique key/pk error
+        {
+            int status = 0;
+            if (cityname.Length > 0 && stateid>0)
+            {
+                try
+                {
+                    tblCity city = new tblCity();
+                    city.cityname = cityname;
+                    city.stateid = stateid;
+                    db.tblCities.Add(city);
+                    db.SaveChanges();
+                    status = 1;
+                }
+                catch (Exception ex)
+                {
+                    var dbupdateException = ex as DbUpdateException;
+                    var sqlException = dbupdateException.InnerException.InnerException as SqlException;
+
+                    if (sqlException.Number == 2627)
+                    {
+                        status = 2;
+                    }
+                    else
+                    {
+                        status = 0;
+                    }
+                }
+
+                return status;
+            }
+            else
+            {
+                return status;
+            }
+        }
+
+        public List<CityModel> GetCities()
+        {
+            List<CityModel> li = new List<CityModel>();
+
+            var data = from a in db.tblCities join b in db.tblStates on a.stateid equals b.stateid select new {a.cityid,a.cityname,b.statename };
+            foreach (var item in data)
+            {
+                CityModel cm = new CityModel();
+                cm.cid = item.cityid;
+                cm.cname = item.cityname;
+                cm.statename = item.statename;
+                li.Add(cm);
+            }
+
+            return li;
+        }
     }
 }

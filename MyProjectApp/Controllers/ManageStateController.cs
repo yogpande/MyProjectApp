@@ -10,6 +10,7 @@ namespace MyProjectApp.Controllers
     public class ManageStateController : Controller
     {
         StateModel sm = new StateModel();
+        CityModel cm = new CityModel();
 
         public ActionResult Index()
         {
@@ -17,6 +18,11 @@ namespace MyProjectApp.Controllers
         }
 
         public ActionResult Create()
+        {
+            return View();
+        }
+
+        public ActionResult CreateCity()
         {
             return View();
         }
@@ -33,18 +39,18 @@ namespace MyProjectApp.Controllers
             return Json(sm.GetStates(), JsonRequestBehavior.AllowGet);
         }
 
-        [HttpGet]
-        public JsonResult GetStatesByPageIndex(int pageIndex)
+        [HttpPost]
+        public JsonResult AddCity(string cname,int sid)
         {
-            sm.PageIndex = pageIndex;
-            sm.PageSize = 10;
-            sm.RecordCount = sm.GetStates().Count;
-
-            int startIndex = (pageIndex - 1) * sm.PageSize;
-
-            var data = sm.GetStates().OrderBy(a => a.sid).Skip(startIndex).Take(sm.PageSize).ToList();
-
-            return Json(data, JsonRequestBehavior.AllowGet);
+            return Json(cm.AddCity(cname,sid), JsonRequestBehavior.AllowGet);
         }
+
+        [HttpGet]
+        public JsonResult GetCities()
+        {
+            return Json(cm.GetCities(), JsonRequestBehavior.AllowGet);
+        }
+
+
     }
 }

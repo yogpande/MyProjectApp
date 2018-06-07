@@ -346,6 +346,7 @@
     <Content Include="Views\Shared\mydesign.cshtml" />
     <Content Include="Views\ManageState\Index.cshtml" />
     <Content Include="Views\ManageState\Create.cshtml" />
+    <Content Include="Views\ManageState\CreateCity.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
